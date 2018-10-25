@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Maven is a build automation tool. It automatically manages dependencies so you don't have to
+    go through the clutz of manually adding libraries to your classpath and IDE and all.
+
+    The default folder structure (code being inside src/main/java) is the default folder structure for maven.
+    Please adjust your folders to be like so. (Yes, the folder it looks for code in can be changed, you can figure that out if you wish to go that route)
+
+    Both IntelliJ and Eclipse have maven plugins. I almost exclusively use IntelliJ for Java projects,
+    and I know IntelliJ has the maven plugin installed by default; you're on your own if you use Eclipse.
+
+    To compile a project with IntelliJ, click the "Maven Projects" button on the very right,
+    expand "Lifecycle," and doubleclick "package."
+    Here's an image if you're lost: https://i.imgur.com/0IImIMa.png
+    The jar will be in the target folder
+    You can run the jar file in a terminal like so: "java -jar SampleJarProgram.jar"
+
+    If you installed maven (a rather annoying process due to Java's JDK installer), simply run "mvn package"
+    in terminal where this pom.xml is located.
+
+    Never again shall you javac. (I can't even recall if I ever used javac.) Or a magical green play button.-->
+
+    <!-- The only thing that really matters here is the artifactId which is your project name
+    The other stuff matters if you're going to publish your project-->
+    <groupId>com.robomwm</groupId>
+    <artifactId>SampleJarProgram</artifactId>
+    <version>1.0</version>
+
+    <!-- Here's where you put the dependencies your program uses
+    Most open source projects are in sonatype, so you don't need to add the maven repo
+    The dependency info is usually listed in the project's readme.-->
+    <dependencies>
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.23.1</version>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <!-- Name of _unshaded_ jar (JAR file without the dependencies included inside jar).
+        See finalName tag specified in maven-shade-plugin -->
+        <finalName>${project.name}-unshaded</finalName>
+
+        <plugins>
+            <plugin>
+                <!-- This maven plugin builds an executable JAR -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <!-- Specify the main class (the class with the static void main(String[] args) method)-->
+                            <mainClass>com.robomwm.samplejarprogram.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!-- This maven plugin copies the dependencies into your compiled JAR file
+            This process is called "shading."
+            Shading removes the need to specify a classpath to a dependency when executing your jar since you already have it inside your jar-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- Final name of jar specified here, since the unshaded variant can't be deleted, only renamed automatically -->
+                    <finalName>${project.name}</finalName>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                </configuration>
+            </plugin>
+
+            <!-- If you made a GUI in IntelliJ, this maven plugin compiles it.
+            So if your program is console-only, this'll do nothing. You can delete it if you want.
+            http://stackoverflow.com/questions/19049253/intelij-idea-gui-designer-maven -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>ideauidesigner-maven-plugin</artifactId>
+                <version>1.0-beta-1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>javac2</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <fork>true</fork>
+                    <debug>true</debug>
+                    <failOnError>true</failOnError>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+
+
+</project>
