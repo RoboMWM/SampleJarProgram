@@ -30,6 +30,13 @@
     <artifactId>SampleJarProgram</artifactId>
     <version>1.0</version>
 
+    <!-- Compiles with JDK source version 8, enforces UTF-8 character encoding-->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
     <!-- Here's where you put the dependencies your program uses
     Most open source projects are in sonatype, so you don't need to add the maven repo
     The dependency info is usually listed in the project's readme.-->
@@ -71,6 +78,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -83,6 +91,7 @@
                     <!-- Final name of jar specified here, since the unshaded variant can't be deleted, only renamed automatically -->
                     <finalName>${project.name}</finalName>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <minimizeJar>true</minimizeJar>
                 </configuration>
             </plugin>
 
