@@ -91,7 +91,7 @@
                     <!-- Final name of jar specified here, since the unshaded variant can't be deleted, only renamed automatically -->
                     <finalName>${project.name}</finalName>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
-                    <minimizeJar>true</minimizeJar>
+                    <minimizeJar>false</minimizeJar>
                 </configuration>
             </plugin>
 
