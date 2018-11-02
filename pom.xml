@@ -50,9 +50,8 @@
 
 
     <build>
-        <!-- Name of _unshaded_ jar (JAR file without the dependencies included inside jar).
-        See finalName tag specified in maven-shade-plugin -->
-        <finalName>${project.name}-unshaded</finalName>
+        <!-- Name of jar -->
+        <finalName>${project.name}</finalName>
 
         <plugins>
             <plugin>
@@ -65,7 +64,8 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <!-- Specify the main class (the class with the static void main(String[] args) method)-->
+                            <!-- Specify the main class (the class with the static void main(String[] args) method)
+                            Include the package it's in as well (package is listed at top of class file)-->
                             <mainClass>com.robomwm.samplejarprogram.Main</mainClass>
                         </manifest>
                     </archive>
@@ -88,10 +88,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!-- Final name of jar specified here, since the unshaded variant can't be deleted, only renamed automatically -->
-                    <finalName>${project.name}</finalName>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
-                    <minimizeJar>false</minimizeJar>
                 </configuration>
             </plugin>
 
